@@ -10,4 +10,5 @@ You can find a pre-built binary attached to the latest release, however you will
 
 I might update it to MAUI once available so it runs on linux too, just for fun.
 
-![image](https://user-images.githubusercontent.com/13939961/156114512-e0cdf06c-d1e0-448e-a71a-faf5ec690e14.png)
+![image](https://user-images.githubusercontent.com/13939961/156138629-5ad1972e-b480-4a1e-86f6-53ca46ef4450.png)
+
