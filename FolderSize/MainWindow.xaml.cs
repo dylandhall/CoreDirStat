@@ -17,50 +17,12 @@ using FolderSize.Annotations;
 
 namespace FolderSize
 {
-
-  public class MainWindowDetails : INotifyPropertyChanged
-  {
-
-    private string _overallSizeText = string.Empty;
-    private string _currentFolder;
-
-    public string OverallSizeText
-    {
-      get => _overallSizeText;
-      set
-      {
-        _overallSizeText = value;
-        OnPropertyChanged(nameof(OverallSizeText));
-      }
-    }
-
-    public string CurrentFolder
-    {
-      get => _currentFolder;
-      set
-      {
-        _currentFolder = value;
-        OnPropertyChanged(nameof(CurrentFolder));
-      }
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    [NotifyPropertyChangedInvocator]
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-  }
   
   public partial class MainWindow : Window, IDisposable
   {
     private FolderInfo _folderInfo;
     private readonly ConcurrentDictionary<string, FolderInfo> _dictionary = new();
     private CancellationTokenSource? _cancellationTokenSource;
-    private readonly MainWindowDetails _windowDetails = new ();
-    
-    private Task? OutstandingTasks { get; set; }
     
     public MainWindow()
     {
@@ -81,7 +43,7 @@ namespace FolderSize
     private void UpdateBinding(FolderInfo folderInfo)
     {
       _folderInfo = folderInfo;
-      MyView.DataContext = _folderInfo;
+      FolderView.DataContext = _folderInfo;
       OverallSize.DataContext = _folderInfo;
       CurrentFolderText.DataContext = _folderInfo;
     }
@@ -89,13 +51,13 @@ namespace FolderSize
     private readonly List<FolderInfo> _list = new();
     private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-      if (!_dictionary.TryGetValue((sender as Grid).Tag.ToString(), out var folderInfo)) return;
+      if (!_dictionary.TryGetValue((sender as Grid)?.Tag?.ToString()??string.Empty, out var folderInfo)) return;
      
       _list.Add(_folderInfo);
       
       UpdateBinding(folderInfo);
       
-      MyView.DataContext = _folderInfo;
+      FolderView.DataContext = _folderInfo;
     }
 
     private void FolderUp_OnClick(object sender, RoutedEventArgs e)
@@ -111,8 +73,6 @@ namespace FolderSize
     {
       _cancellationTokenSource?.Cancel();
       _cancellationTokenSource?.Dispose();
-      
-      OutstandingTasks = null;
       
       UpdateBinding(null);
       

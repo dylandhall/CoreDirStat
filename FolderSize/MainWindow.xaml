@@ -15,7 +15,10 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="25"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
             <Button HorizontalAlignment="Left" Click="FolderUp_OnClick" Width="40">
                 <TextBlock>⤴️</TextBlock>
             </Button>
@@ -28,10 +31,15 @@
             
             <TextBlock Margin="20 0 0 0" VerticalAlignment="Center" Name="CurrentFolderText" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
         </StackPanel>
-        <ListView Name="MyView" ItemsSource="{Binding FsObjects, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1">
+        <ListView Name="FolderView" ItemsSource="{Binding FsObjects, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch" Width="750" Tag="{Binding Name}" MouseLeftButtonUp="UIElement_OnMouseLeftButtonDown">
+                    <Grid HorizontalAlignment="Stretch" Tag="{Binding Name}" MouseLeftButtonUp="UIElement_OnMouseLeftButtonDown">
                         
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="5*"></ColumnDefinition>
@@ -44,13 +52,12 @@
                         <TextBlock Grid.Column="0" Text="{Binding DisplayName}"></TextBlock>
                         <ProgressBar Grid.Column="1" Margin="20 0 20 0" Width="200" Value="{Binding Percentage, UpdateSourceTrigger=PropertyChanged}"></ProgressBar>
                         <TextBlock Grid.Column="2" HorizontalAlignment="Right" Text="{Binding SizeString, UpdateSourceTrigger=PropertyChanged}" ></TextBlock>
-                        <TextBlock Margin="20 0 0 0" Grid.Column="3" Visibility="{Binding DisplayTick, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">✔️</TextBlock>
+                        <TextBlock HorizontalAlignment="Right" Margin="20 0 0 0" Grid.Column="3" Visibility="{Binding DisplayTick, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">✔️</TextBlock>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
-        
         </ListView>
-        <StackPanel Name="OverallSize" Grid.Row="2" Orientation="Horizontal">
+        <StackPanel Name="OverallSize" Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
             <TextBlock Margin="20 0 0 0" VerticalAlignment="Center"  Text="{Binding SizeString, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
             <TextBlock VerticalAlignment="Center" Margin="10 0 0 0" Visibility="{Binding DisplayTick, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}">✔️</TextBlock>
         </StackPanel>
