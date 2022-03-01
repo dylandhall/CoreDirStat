@@ -6,7 +6,7 @@ A simple implementation in .net 6 is very fast indeed!
 
 I have not included any real visualisation beyond showing how much data each folder has comparitively, but that's the key information.
 
-You can find a pre-built binary attached to the latest release here: https://github.com/dylandhall/CoreDirStat/releases/download/v1.0.2/build.zip,
+You can find a pre-built binary attached to the latest release here: https://github.com/dylandhall/CoreDirStat/releases/download/v1.0.2/build.zip
 
 You will need the latest version of .net 6 to run it. Download here: https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 
