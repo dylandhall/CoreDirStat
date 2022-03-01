@@ -18,11 +18,11 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet publish --no-restore
       env:
         Configuration: Release
     - name: Compress build output
-      run: Compress-Archive -Path $env:GITHUB_WORKSPACE\FolderSize\bin\Release\net6.0-windows\* -DestinationPath $env:RUNNER_TEMP\build.zip
+      run: Compress-Archive -Path $env:GITHUB_WORKSPACE\FolderSize\bin\Release\net6.0-windows\publish\* -DestinationPath $env:RUNNER_TEMP\build.zip
       shell: powershell
       env:
         RUNNER_TEMP: ${{ runner.temp }}
