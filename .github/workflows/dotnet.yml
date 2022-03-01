@@ -28,7 +28,7 @@ jobs:
         RUNNER_TEMP: ${{ runner.temp }}
         GITHUB_WORKSPACE: ${{ github.workspace }}
     - name: Publish binaries
-      run: gh release upload 'v1.0.1' "${{ env.RUNNER_TEMP }}\\build.zip" --clobber
+      run: gh release upload 'v1.0.2' "${{ env.RUNNER_TEMP }}\\build.zip" --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         RUNNER_TEMP: ${{ runner.temp }}

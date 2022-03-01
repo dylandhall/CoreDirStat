@@ -17,7 +17,6 @@ using FolderSize.Annotations;
 
 namespace FolderSize
 {
-  
   public partial class MainWindow : Window, IDisposable
   {
     private FolderInfo _folderInfo;
@@ -27,14 +26,17 @@ namespace FolderSize
     public MainWindow()
     {
       InitializeComponent();
-      GatherData();
+      DriveInfo
+        .GetDrives()
+        .Select(d => new ComboBoxItem{Content = $"{d.Name} ({FileSizeFormatter.FormatSize(d.TotalSize)})", Tag = d.Name, IsSelected = d.Name==@"C:\"})
+        .ToList()
+        .ForEach(i => Drives.Items.Add(i));
     }
 
-    private void GatherData()
+    private void GatherData(string path)
     {
       _cancellationTokenSource = new CancellationTokenSource();
-      var path = @"C:\";
-
+      
       var rootFolderInfo = new FolderInfo(path, _dictionary, new TokenBox(_cancellationTokenSource.Token));
       
       UpdateBinding(rootFolderInfo);
@@ -69,15 +71,19 @@ namespace FolderSize
 
     private void Refresh_OnClick(object sender, RoutedEventArgs e)
     {
+      ClearAllData();
+      GatherData((Drives.SelectedItem as ComboBoxItem)?.Tag?.ToString()??@"C:\");
+    }
+
+    private void ClearAllData()
+    {
       _cancellationTokenSource?.Cancel();
       _cancellationTokenSource?.Dispose();
-      
+
       UpdateBinding(null);
-      
+
       _list.Clear();
       _dictionary.Clear();
-
-      GatherData();
     }
 
     public void Dispose()
@@ -89,6 +95,12 @@ namespace FolderSize
     private void Explore_OnClick(object sender, RoutedEventArgs e)
     {
       Process.Start("explorer.exe", _folderInfo?.Name ?? @"C:\");
+    }
+
+    private void Drives_OnSelected(object sender, RoutedEventArgs e)
+    {
+      ClearAllData();
+      GatherData(((sender as ComboBox)?.SelectedItem as ComboBoxItem)?.Tag?.ToString()??@"C:\");
     }
   }
 }

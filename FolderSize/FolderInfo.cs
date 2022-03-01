@@ -87,9 +87,8 @@ public class FolderInfo : IFsInfo
                 OnPropertyChanged(nameof(DisplayTick));
             }, token.Token);
         }
-        catch (Exception ex)
+        catch 
         {
-            Debug.WriteLine(ex.Message);
             Task = Task.CompletedTask;
         }
     }
