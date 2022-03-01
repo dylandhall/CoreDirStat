@@ -56,8 +56,6 @@ namespace FolderSize
       _list.Add(_folderInfo);
       
       UpdateBinding(folderInfo);
-      
-      FolderView.DataContext = _folderInfo;
     }
 
     private void FolderUp_OnClick(object sender, RoutedEventArgs e)
