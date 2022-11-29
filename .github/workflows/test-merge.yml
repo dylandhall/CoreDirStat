@@ -13,10 +13,6 @@ jobs:
         fetch-depth: 0
     - name: merge
       run: |
-        $branchTree = @"
-        main = testbranch
-        testbranch = othertestbranch, #12326-save-exit-ticket-answer
-        "@
         function RunBranch {
             param ([string]$source, [string]$branchName, $destinations)
             if ($branchName -ne $null -and $branchName -ne "") {
@@ -36,8 +32,9 @@ jobs:
         }
         git pull
         $source = "$env:GITHUB_REF_NAME"
-        $destinationMap = ConvertFrom-StringData -StringData $branchTree
+        $destinationMap = type $env:GITHUB_WORKSPACE\.github\workflows\branch-map.txt | ConvertFrom-StringData
         RunBranch -source $source -destinations $destinationMap
       shell: powershell
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_WORKSPACE: ${{ github.workspace }}

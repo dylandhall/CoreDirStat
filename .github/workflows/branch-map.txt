@@ -1,0 +1,2 @@
+main = testbranch
+testbranch = othertestbranch, #12326-save-exit-ticket-answer
