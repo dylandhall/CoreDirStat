@@ -8,7 +8,9 @@ jobs:
   merge:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - name: merge
       run: |
         git pull
@@ -16,3 +18,5 @@ jobs:
         $hasConflict = git merge origin/main | Select-String "CONFLICT" -Quiet
         if ($hasConflict -ne $True) { git push } else { git merge --abort }
       shell: powershell
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
