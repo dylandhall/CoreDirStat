@@ -13,14 +13,31 @@ jobs:
         fetch-depth: 0
     - name: merge
       run: |
+        $branchTree = @"
+        main = testbranch
+        testbranch = othertestbranch, testbranch2
+        "@
+        function RunBranch {
+            param ([string]$source, [string]$branchName, $destinations)
+            if ($branchName -ne $null -and $branchName -ne "") {
+              $isNotFound = git checkout "origin/$branchName" -t | Select-String "fatal" -Quiet
+              if ($isNotFound -eq $true) { Exit }
+              $hasConflict = git merge "origin/$source" | Select-String "CONFLICT" -Quiet
+              if ($hasConflict -ne $True) { git push } else { Exit }
+              $source = $branchName
+            }
+            $thisName = $destinations.$source
+            if ($thisName -ne $null) {
+              Do {
+                $this, $thisName = $thisName.Split(",")
+                RunBranch -source $source -branchName $this -destinations $destinations
+              } Until ($thisName -eq $null)
+            }
+        }
         git pull
-        $target = "develop"
         $source = "$env:GITHUB_REF_NAME"
-        if ($source -eq "main") { $target = "testbranch" }
-        if ($source -eq "testbranch") { $target = "main" }
-        git checkout "origin/$target" -t
-        $hasConflict = git merge "origin/$source" | Select-String "CONFLICT" -Quiet
-        if ($hasConflict -ne $True) { git push } else { git merge --abort }
+        $destinationMap = ConvertFrom-StringData -StringData $branchTree
+        RunBranch -source $source -destinations $destinationMap
       shell: powershell
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
