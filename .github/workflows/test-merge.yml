@@ -2,7 +2,7 @@ name: "Test merge"
 
 on:
   push:
-    branches: [ main, testbranch ]
+    branches: *
 
 jobs:
   merge:
