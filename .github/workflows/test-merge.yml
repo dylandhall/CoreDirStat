@@ -1,0 +1,18 @@
+name: "Test merge"
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  merge:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: merge
+      run: >
+        git pull
+        git checkout origin/testbranch -t
+        $hasConflict = git merge origin/main | Select-String "CONFLICT" -Quiet
+        if ($hasConflict -ne $True) { git push } else { git merge --abort }
+      shell: powershell
