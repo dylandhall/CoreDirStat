@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: merge
-      run: >
+      run: |
         git pull
         git checkout origin/testbranch -t
         $hasConflict = git merge origin/main | Select-String "CONFLICT" -Quiet
