@@ -30,7 +30,7 @@ jobs:
             if ($thisName -ne $null) {
               Do {
                 $this, $thisName = $thisName.Split(",")
-                RunBranch -source $source -branchName $this -destinations $destinations
+                RunBranch -source $source -branchName $this.Trim() -destinations $destinations
               } Until ($thisName -eq $null)
             }
         }
