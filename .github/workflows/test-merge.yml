@@ -15,10 +15,10 @@ jobs:
       run: |
         git pull
         $target = "develop"
-        $source = "${{ env.GITHUB_REF_NAME }}"
+        $source = "${{ github.GITHUB_REF_NAME }}"
         if ($source -eq "main") { $target = "testbranch" }
         if ($source -eq "testbranch") { $target = "main" }
-        git checkout "origin/$testbranch" -t
+        git checkout "origin/$target" -t
         $hasConflict = git merge "origin/$source" | Select-String "CONFLICT" -Quiet
         if ($hasConflict -ne $True) { git push } else { git merge --abort }
       shell: powershell
