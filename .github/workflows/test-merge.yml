@@ -15,7 +15,7 @@ jobs:
       run: |
         git pull
         $target = "develop"
-        $source = "$env.BRANCH_NAME"
+        $source = "$env:GITHUB_REF_NAME"
         if ($source -eq "main") { $target = "testbranch" }
         if ($source -eq "testbranch") { $target = "main" }
         git checkout "origin/$target" -t
@@ -24,4 +24,3 @@ jobs:
       shell: powershell
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        BRANCH_NAME: ${{ env.GITHUB_REF_NAME }}
