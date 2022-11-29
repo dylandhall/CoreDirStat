@@ -15,7 +15,7 @@ jobs:
       run: |
         $branchTree = @"
         main = testbranch
-        testbranch = othertestbranch, testbranch2
+        testbranch = othertestbranch, #12326-save-exit-ticket-answer
         "@
         function RunBranch {
             param ([string]$source, [string]$branchName, $destinations)
