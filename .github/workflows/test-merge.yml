@@ -2,7 +2,7 @@ name: "Test merge"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, testbranch ]
 
 jobs:
   merge:
@@ -14,8 +14,12 @@ jobs:
     - name: merge
       run: |
         git pull
-        git checkout origin/testbranch -t
-        $hasConflict = git merge origin/main | Select-String "CONFLICT" -Quiet
+        $target = "develop"
+        $source = "${{ env.GITHUB_REF_NAME }}"
+        if ($source -eq "main") { $target = "testbranch" }
+        if ($source -eq "testbranch") { $target = "main" }
+        git checkout "origin/$testbranch" -t
+        $hasConflict = git merge "origin/$source" | Select-String "CONFLICT" -Quiet
         if ($hasConflict -ne $True) { git push } else { git merge --abort }
       shell: powershell
       env:
